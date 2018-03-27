@@ -2,23 +2,19 @@
 
 ## update_available_resource 的作用
 
-`update_available_resource` Nova compute 上报资源的**定时**服务，他的主要上报对象是 Nova placement 服务，同时也会直接更新数据库中的 `compute node table`。那么 `update_availalbe_resource` 上报了那些资源？上报的资源大体可分为两类：1 compute service node 的资源，2. hypervisor node（host）资源。
+`update_available_resource` Nova compute **定时**上报资源的方法，他的主要上报对象是 Nova placement 服务，同时也会直接更新数据库中的 `compute node table`。那么 `update_availalbe_resource` 上报了哪些资源？上报的资源大体可分为两类：1 compute service node 的资源，2. hypervisor node（host）资源。
 
-#### 概念和词汇
+#### 概念
 
-compute service node 资源：Nova compute service 可以类比 VMware 的 vCenter，他可以直接管理一个 hypervisor 或者多个 hypervisor。在一个 compute service node 下的资源则是当前 node 下管理的所有 hypervisor 资源的总和。Nova 的其他服务只能和 compute service 进行直接交互（隔离了 Nova 和 Hypervisor 直接交互，从代码的维护来说也是好事），所以 Nova 的其他服务职能看到 Nova compute 节点上的资源。
-
-hyperviosr node 资源：是针对单个 hypervisor 来说的资源量（如 vCenter 中的一个 cluster，KVM 中的一个 hypervisor），可以类比 VMware 的 ESXi 服务。了解每个 hypervisor node 上资源是有必要的，每个 compute service node 需要实时计算当前 node 上还剩下的资源量，这是就必须知道每个节点上的资源量。Nova 创建的虚拟机最终落在每个 （resource provider） hyperviosr node，根据不同的 hypervisor node，再计算当前所剩余的资源。
-
-host：表识一个 compute service node，host name 可以通过 nova.conf 配置文件更改，如果没有更改则是和 compute service node 所在主机名称一样。（多个 compute service node 可以配置一样的 hostname）
-
-hypervisor hostname：标识一个 hypervisor node，在 VMware 中则是 cluster 的 domain name，在 KVM 中通过 libert driver 的 getInfo 方法获得。（多个 hypervisor 不可以被配置一个的 hypervisor name，如果这样 compute 节点在（通过 compute node name 和 hypervisor name 来筛选是否已经存在当前compute node在数据库中）统计 hypervisor 过程中会少统计 hypervisor 资源的总量）
-
-host 和 hypervisor 总是要做关联。没有 host 的 hypervisor 是不存在的。如果存在那么就是 db 的垃圾。
+* compute service node 资源：Nova compute service 可以类比 VMware 的 vCenter，他可以直接管理一个 hypervisor 或者多个 hypervisor。在一个 compute service node 下的资源则是当前 node 下管理的所有 hypervisor 资源的总和。
+* hyperviosr node 资源：是针对单个 hypervisor 来说的资源（如 KVM 中的一个 hypervisor），Openstack 将 vCenter 上的一个 cluster 资源看成一个 hypervisor node 的资源。每个 compute service node 通过计算每个 Hypervisor 节点上的资源量来统计当前compute service node 上剩余的资源量。
+* host：表识一个 compute service node，host name 可以通过 nova.conf 配置文件更改，如果没有更改则是和 compute service node 所在主机名称一样。（多个 compute service node 可以配置一样的 hostname）
+* hypervisor hostname：标识一个 hypervisor node，在 Openstack 中 vCenter 的 hypervisor node hostname 则视为一个 cluster 的 domain name，在 KVM 中通过 libert driver 的 getInfo 方法获得。（多个 hypervisor 不可以被配置一个的 hypervisor name，会导致统计的 hypervisor 资源统总量小于真实的 hypervisor 资源的总量）
+* host 和 hypervisor 总是要做关联。没有 host 的 hypervisor 是不存在的。
 
 ## update_available_resource 代码分析
 
-在说代码之前，这里得先提示在 Nova code 里面会有两个 update_available_resource 方法，一个是在 compute/manager.py 和 compute/resource_tracker.py 文件中，前者会调用后者中的方法。
+Nova code 里面会有两个 update_available_resource 方法，一个是在 compute/manager.py 和 compute/resource_tracker.py 文件中，前者会调用后者。
 
 `update_available_resource`在 Nova compute pre_start_hook 中第一次触发，这次出发是主动调用。在 Nova compute 启动之前上报一次资源状态。
 
@@ -34,14 +30,12 @@ def pre_start_hook(self):
                                    startup=True)
 ```
 
-想了解代码到底做了什么，我们得把代码堆栈式的运行过程，给平铺开来看。
-
 #### update_avaiable_resource 时如何定义的，其中大体有四部：
 
-* `self._get_compute_nodes_in_db` : 用 compute service node 的 host 寻找 nova db compute_nodes 中对应的 compute node。 
+* `self._get_compute_nodes_in_db` : 用 compute service node 的 host 寻找 nova db compute_nodes 中对应的 compute node。
 * `self.driver.get_available_nodes`：使用 virt driver 去找到当前 compute service node 下管理的 hypervisor node。
 * `self.update_available_resource_for_node`：将 compute service node host 和 hypervisor node hostname 在 compute_nodes 表中做关联，同时update placement 服务。 **注意这个方法是针对每一个 hypervisor node，而不是 compute node**
-* `self.scheduler_client.reportclient.delete_resource_provider`: 把 compute service node 和 hypervisor node 关联有错误的，compute service node 从 compute_nodes 表中清理掉，同时也清理掉这些 hypervisor 在 placement 服务中的记录。
+* `self.scheduler_client.reportclient.delete_resource_provider`: 把 compute service node 和 hypervisor node 关联有错误的 compute service node 从 compute_nodes 表中清理掉，同时也清理掉这些 hypervisor 在 placement 服务中的记录。
 
 ```python
     # 在 nova/compute/manager.py 文件中
@@ -56,28 +50,28 @@ def pre_start_hook(self):
         :param startup: True if this is being called when the nova-compute
             service is starting, False otherwise.
         """
-        # shengping：这里的 compute_nodes 可以理解为 compute service node
+        # 这里的 compute_nodes 可以理解为 compute service node
         # 通过 self.host （配置文件中可以配置）获取在 nova compute node table
         # 中的获取 compute node 信息。
         compute_nodes_in_db = self._get_compute_nodes_in_db(context,
                                                             use_slave=True,
                                                             startup=startup)
         try:
-            # shengping：这里的 node 指的是被 compute service node manage 的 hypervisor
+            # 这里的 node 指的是被 compute service node manage 的 hypervisor
             # node （hypervisor hostname）
             nodenames = set(self.driver.get_available_nodes())
         except exception.VirtDriverNotReady:
             LOG.warning("Virt driver is not ready.")
             return
-        # shengping：这里去更新 compute_node table 和 resource provider table
+        # 这里去更新 compute_node table 和 resource provider table
         # 这里的 nodename 是 compute service  manage 的 hypervisor
-        # 在这里会去创建 resource provider，resource inventory，resource class，resource   
+        # 在这里会去创建 resource provider，resource inventory，resource class，resource
         # provider 等。
         # 注意这个方法是针对每一个 hypervisor node，而不是 compute node
         for nodename in nodenames:
             self.update_available_resource_for_node(context, nodename)
 
-        # shengping：这里的意思是找到了多个 compute nodes，但是其中有些 compute nodes 并不是
+        # 这里的意思是找到了多个 compute nodes，但是其中有些 compute nodes 并不是
         # 管理当前 driver 控制的 hypervisor。说明 compute nodes 和已经不存在的 hypervisor node
         # 做了关联，这个是没有用的。就算找到这个 compute nodes 去创建虚拟机，hypervisor node 不存在
         # 是创建不了虚拟机的。
@@ -101,13 +95,12 @@ def pre_start_hook(self):
 
 `self.update_available_resource_for_node`: 这个方法是 `update_available_resource` 更新 resource 的主题所在。**注意这个方法是针对每一个 hypervisor node，而不是 compute node**
 
-从代码来看，这里使用到了 resource tracker 对象（**注意在创建resource tracker 对象时，manager 将自己的self.host 传给了 resource tracker 对象的 self.host**）。直接去调用resource tracker 的 `update_available_resource`。 nodename 参数也是从 drvier 那里得到的 hypervisor hostname set 集合。
+从代码来看，这里使用到了 resource tracker 对象（**注意在创建resource tracker 对象时，compute manager 将自己的self.host 传给了 resource tracker 对象的 self.host**）。直接去调用resource tracker 的 `update_available_resource`。 nodename 参数也是从 drvier 那里得到的 hypervisor hostname set 集合。
 
-为什么调用 rt 的 `update_available_resource` 要单独拿出来写，原因可能是因为多处调用到了这个方法，这个方法是个 public 方法。
 
 ```python
     def update_available_resource_for_node(self, context, nodename):
-        # shengping：这个compute service node 将他的 host 传入 rt
+        # 这个compute service node 将他的 host 传入 rt
         rt = self._get_resource_tracker()
         try:
             rt.update_available_resource(context, nodename)
@@ -152,12 +145,12 @@ def pre_start_hook(self):
                   "%(host)s (node: %(node)s)",
                  {'node': nodename,
                   'host': self.host})
-        # shengping：这里用每一个 nodename， 通过driver 来获取 每个 hypervisor node 上的resource
+        # 这里用每一个 nodename， 通过driver 来获取 每个 hypervisor node 上的resource
         resources = self.driver.get_available_resource(nodename)
         # NOTE(jaypipes): The resources['hypervisor_hostname'] field now
         # contains a non-None value, even for non-Ironic nova-compute hosts. It
         # is this value that will be populated in the compute_nodes table.
-        # shengping：将对应 resource 和 管理这个 resource的 compute service 节点的 IP 做关联
+        # 将对应 resource 和 管理这个 resource的 compute service 节点的 IP 做关联
         resources['host_ip'] = CONF.my_ip
 
         # We want the 'cpu_info' to be None from the POV of the
@@ -189,7 +182,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
 * `self._update`：此处的 update 和 init compute node 中的 update 是完全不同的，此处的 update 是 compute node 计算过使用量后，针对 placement 服务的 update，而不是去初始化 placement。
 
 ```python
-    # shengping： 这里第一次创建 compute node 在 compute_node数据库中
+    # 这里第一次创建 compute node 在 compute_node数据库中
     @utils.synchronized(COMPUTE_RESOURCE_SEMAPHORE)
     def _update_available_resource(self, context, resources):
 
@@ -287,14 +280,14 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
             self._setup_pci_tracker(context, cn, resources)
             self._update(context, cn)
             return
-        # shengping： 关键是在这里，通过 hypervisor host name
+        # 关键是在这里，通过 hypervisor host name
         # 和 compute service host 节点信息，去 compute node 表中
         # 寻找 compute node。如果有多个 compute service host 连接一个
         # 同一个 hypervisor 那么他们的 hypervisor host name 必然是相同的
         # 同时如果多个 compute service node host name 也是相同的，
         # 那么找到的是同一个 在 compute node 表中的记录。
 
-        # shengping：依次类推，那resource provider 记录的也是一个 hostname
+        # 依次类推，那resource provider 记录的也是一个 hostname
         # 和 hypervisor name 相同的一个 compute service。这样就算是挂掉一个
         # compute service node，在下次上报时会被没有挂掉的 compute service node
         # 刷新 IP。
@@ -315,7 +308,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
         if self._check_for_nodes_rebalance(context, resources, nodename):
             return
 
-        # shengping：如果没有找到，则会去在 compute_node table 中创建这个 object
+        # 如果没有找到，则会去在 compute_node table 中创建这个 object
         # there was no local copy and none in the database
         # so we need to create a new compute node. This needs
         # to be initialized with resource values.
@@ -330,7 +323,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
                  {'host': self.host, 'node': nodename, 'uuid': cn.uuid})
 
         self._setup_pci_tracker(context, cn, resources)
-        # shengping：使用 compute node 的信息去更新
+        # 使用 compute node 的信息去更新
         # resource provider inventory table（一个 hypervisor 总资源 table）
         self._update(context, cn)
 ```
@@ -364,7 +357,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
         nodename = compute_node.hypervisor_hostname
         # Persist the stats to the Scheduler
         try:
-            # 从 driver 获得 inventory 
+            # 从 driver 获得 inventory
             inv_data = self.driver.get_inventory(nodename)
             _normalize_inventory_from_cn_obj(inv_data, compute_node)
             # 使用 scheduler client 上报信息，可以回去placement 服务创建
@@ -394,7 +387,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
             # cached traits refreshed.
             self.reportclient.set_traits_for_provider(
                 context, compute_node.uuid, traits)
-        
+
         # 和热插拔有关
         if self.pci_tracker:
             self.pci_tracker.save(context)
@@ -437,7 +430,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
         self._update_inventory(context, rp_uuid, inv_data)
 ```
 
-* `_ensure_resource_provider`: 
+* `_ensure_resource_provider`:
 * `_ensure_resource_classes`:
 * `_update_inventory` :
 
