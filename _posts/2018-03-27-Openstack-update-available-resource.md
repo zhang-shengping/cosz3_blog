@@ -39,7 +39,7 @@ def pre_start_hook(self):
                                    startup=True)
 ```
 
-#### update_avaiable_resource 时如何定义的，其中大体有四部：
+### update_avaiable_resource 时如何定义的，其中大体有四部：
 
 * `self._get_compute_nodes_in_db` : 用 compute service node 的 host 寻找 nova db compute_nodes 中对应的 compute node。
 * `self.driver.get_available_nodes`：使用 virt driver 去找到当前 compute service node 下管理的 hypervisor node。
@@ -100,7 +100,7 @@ def pre_start_hook(self):
                     context, cn, cascade=True)
 ```
 
-####  `self.update_available_resource_for_node` 的定义
+### `self.update_available_resource_for_node` 的定义
 
 `self.update_available_resource_for_node`: 这个方法是 `update_available_resource` 更新 resource 的主题所在。**注意这个方法是针对每一个 hypervisor node，而不是 compute node**
 
@@ -134,7 +134,7 @@ def pre_start_hook(self):
                           {'node': nodename})
 ```
 
-#### resource tracker 中的`update_available_resource`
+### resource tracker 中的`update_available_resource`
 
 ```python
     def update_available_resource(self, context, nodename):
@@ -181,7 +181,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
 * `resources['host_ip'] = CONF.my_ip`：这一步直接将 hyperviosr node 和 compute service node **通过 IP 作起了关联**。
 * `_update_available_resource`：通过以上步骤的到了一个没有经过任何处理和记录的 raw resource，此方法用来记录和细化处理得到的 raw resource。
 
-#### `_update_available_resource` 解析
+### `_update_available_resource` 解析
 
 这片文章只是在与关心 resource update 的流程，所以对 resource 的计算部分暂时不提。
 
@@ -254,7 +254,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
                   {'host': self.host, 'node': nodename})
 ```
 
-#### `_init_compute_node`
+### `_init_compute_node`
 
 * 从 resource 中可以获得 hypervisor_hostname，赋值给 nodename
 * 用 nodename 去获取  self.compute_nodes 中缓存的 compute node 信息，如果获取得到，给 compute node 和 placement 做更新。
@@ -337,7 +337,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
         self._update(context, cn)
 ```
 
-#### `self._update`
+### `self._update`
 
 `self._update`方法其实是调用了 scheduler client，用 scheduler report 去上报 placement 服务。
 
@@ -402,7 +402,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
             self.pci_tracker.save(context)
 ```
 
-#### scheduler report 服务
+### scheduler report 服务
 
 ```python
     def set_inventory_for_provider(self, context, rp_uuid, rp_name, inv_data,
