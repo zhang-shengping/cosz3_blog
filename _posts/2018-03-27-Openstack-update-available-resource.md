@@ -1,3 +1,12 @@
+---
+title: Openstack Nova update_avaiable_resource
+categories:
+- Nova
+tags:
+- code
+- nova
+- self-note
+---
 # Nova resource update（update_available_resource 方法）
 
 ## update_available_resource 的作用
@@ -430,16 +439,7 @@ resource tracker 中的`update_available_resource`主要用 hypervisor node host
         self._update_inventory(context, rp_uuid, inv_data)
 ```
 
-* `_ensure_resource_provider`:
-* `_ensure_resource_classes`:
-* `_update_inventory` :
-
-## placement 服务简介
-
-
-
-## host 和 hypervisor host 区别
-
-
-
-## compute service host 和 hypervisor host 的一对多，多对一
+以下三个方法和 placement 服务相关，待续...
+* `_ensure_resource_provider`
+* `_ensure_resource_classes`
+* `_update_inventory`
