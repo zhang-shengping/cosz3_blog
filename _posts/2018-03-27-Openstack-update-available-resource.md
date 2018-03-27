@@ -1,5 +1,5 @@
 ---
-title: Openstack Nova update_avaiable_resource
+title: Openstack Nova Compute update_avaiable_resource
 categories:
 - Nova
 tags:
@@ -7,7 +7,6 @@ tags:
 - nova
 - self-note
 ---
-
 
 ## update_available_resource 的作用
 
