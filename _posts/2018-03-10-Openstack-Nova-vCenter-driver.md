@@ -159,9 +159,9 @@ refer： [https](https://docs.openstack.org/oslo.vmware/latest/user/usage.html)[
 
 **Nova vmwareapi 在用户层面的使用与 oslo_vmware 一样**：
 
-1.建立 session 连接
+1. 建立 session 连接
 
-2.用 session 和 VCenter 交互，交互内容被细化为 vm 相关的操作。
+2. 用 session 和 VCenter 交互，交互内容被细化为 vm 相关的操作。
 
 ![](https://ws4.sinaimg.cn/large/006tKfTcgy1fptnqoh0npj30f207rjri.jpg)
 
