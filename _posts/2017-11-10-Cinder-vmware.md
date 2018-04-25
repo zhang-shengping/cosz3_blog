@@ -1,6 +1,6 @@
 ---
 title: Cinder 对接 Vmware
-categories：
+categories:
 - 部署
 tags:
 - cinder
