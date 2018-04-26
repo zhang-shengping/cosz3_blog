@@ -202,15 +202,17 @@ def count_in_process():
 # 因为多进程不能使用 global 来分享资源
 # 需要用 multiprocessing.Value 或者 multiprocessing.Queue
 # 如果使用共享资源，由 os 来控制 context switch，会带来不确定性，产生竞争。
-# In 'Threading' module, threads have shared memory, Threads can manipulate global 
-# variables of main thread, instead of multiprocessing module, that runs another 
+# In 'Threading' module, threads have shared memory, Threads can manipulate global
+# variables of main thread, instead of multiprocessing module, that runs another
 # subprocess in memory and it does not have shared memory like threading.
 
 # count_in_process()
 # print count
 ```
 
+**count 时进程之间产生的竞争关系,而协程不会:**
 
+![](https://ws1.sinaimg.cn/large/006tNc79gy1fqmqecbhpsj30rv0exjrk.jpg)
 
 ## 参考
 
