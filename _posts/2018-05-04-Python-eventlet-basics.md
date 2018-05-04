@@ -485,7 +485,7 @@ threading.current_thread <_MainThread(MainThread, started 139717144807232)>
 
 #### 使用 monkeypatch 无效怎么办（可以使用tpool）
 
-在有些情况下 python 模块使用 C library 的 OS calls 做一些 IO socket 操作，这时使用 monkeypatch 也阻止不了  blocking。这里就需要是用 (eventlet.tpool)[http://eventlet.net/doc/threading.html]，tpool 会启动一个新的 thread （不是协程）来运行。
+在有些情况下 python 模块使用 C library 的 OS calls 做一些 IO socket 操作，这时使用 monkeypatch 也阻止不了  blocking。这里就需要是用 [eventlet.tpool](http://eventlet.net/doc/threading.html), tpool 会启动一个新的 thread （不是协程）来运行。
 
 ```python
 >>> import thread
