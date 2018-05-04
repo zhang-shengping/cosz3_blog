@@ -2,7 +2,7 @@
 title: Eventlet Notes
 categories:
 - 使用总结记录
-tags：
+tags:
 - eventlet
 - non-blocking
 - coroutine
