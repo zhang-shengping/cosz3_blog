@@ -14,8 +14,8 @@ tags：
 
 Eventlet is built around the concept of green threads (i.e. coroutines, we use the terms interchangeably) that are launched to do network-related work. Green threads differ from normal threads in two main ways:
 
-- <u>Green threads are so cheap they are nearly free</u>. You do not have to conserve green threads like you would normal threads. In general, there will be at least one green thread per network connection.
-- <u>Green threads cooperatively yield to each other instead of preemptively being scheduled. The major advantage from this behavior is that shared data structures don’t need locks, because only if a yield is explicitly called can another green thread have access to the data structure</u>.It is also possible to inspect primitives such as queues to see if they have any pending data.
+ <u>Green threads are so cheap they are nearly free</u>. You do not have to conserve green threads like you would normal threads. In general, there will be at least one green thread per network connection.
+ <u>Green threads cooperatively yield to each other instead of preemptively being scheduled. The major advantage from this behavior is that shared data structures don’t need locks, because only if a yield is explicitly called can another green thread have access to the data structure</u>.It is also possible to inspect primitives such as queues to see if they have any pending data.
 
 ![](http://eventlet.net/doc/_images/threading_illustration.png)
 
@@ -78,7 +78,7 @@ def fetch(url):
 pool = eventlet.GreenPool()
 for body in pool.imap(fetch, urls):
     print("got body", len(body))
-    
+
 # server pattern
 import eventlet
 
@@ -220,7 +220,7 @@ def do_work(index):
     record[index] = record.get(index, 0) + 1
     data = "worker=%s: %s \n" % (index, record[index])
     print data
-    
+
     # 堵塞
     time.sleep(10)
 
@@ -256,7 +256,7 @@ def do_work(index):
     record[index] = record.get(index, 0) + 1
     data = "worker=%s: %s \n" % (index, record[index])
     print data
-    
+
     # 堵塞
     time.sleep(10)
 
@@ -293,7 +293,7 @@ def do_work(index):
     record[index] = record.get(index, 0) + 1
     data = "worker=%s: %s \n" % (index, record[index])
     print data
-    
+
     # 使用 monkeypatch 不堵塞
     time.sleep(10)
 
@@ -331,7 +331,7 @@ def do_work(index):
     record[index] = record.get(index, 0) + 1
     data = "worker=%s: %s \n" % (index, record[index])
     print data
-    
+
     # 堵塞
     time.sleep(10)
 
@@ -369,11 +369,11 @@ def do_work(index):
     record[index] = record.get(index, 0) + 1
     data = "worker=%s: %s \n" % (index, record[index])
     print data
-    
+
     # 堵塞
     # time.sleep(10)
     eventlet.greenthread.sleep(1)
-    
+
 def work(worker, jobs):
     for x in xrange(0, jobs):
         # 打出 thread 号,这里会输出相同的 thread 号。
@@ -521,4 +521,4 @@ running in new thread: True
 
 [tpool doc](http://eventlet.net/doc/threading.html)
 
-[tpool 的一些 examples](https://programtalk.com/python-examples/eventlet.tpool.execute/) 
+[tpool 的一些 examples](https://programtalk.com/python-examples/eventlet.tpool.execute/)
