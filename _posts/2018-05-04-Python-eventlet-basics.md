@@ -507,7 +507,7 @@ running in new thread: True
 >
 > Combined with `eventlet.spawn(tpool.execute, fun, ...)` it would not block even the caller coroutine. Maybe you find this a helpful combination.
 
-比如一次性大量的读写文件操作，就算是打了 monkeypatch 还是会有 block 代码， [这时可以考虑使用 tpool](https://stackoverflow.com/questions/17015403/python-eventlet-file-asyncnon-blocking-io?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)。
+比如一次性大量的读写文件操作，就算是打了 monkeypatch 还是会有 [block 代码](https://stackoverflow.com/questions/17015403/python-eventlet-file-asyncnon-blocking-io?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)， [这时可以考虑使用 tpool](https://stackoverflow.com/questions/17015403/python-eventlet-file-asyncnon-blocking-io?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)。
 
 ## 参考
 
@@ -522,3 +522,5 @@ running in new thread: True
 [tpool doc](http://eventlet.net/doc/threading.html)
 
 [tpool 的一些 examples](https://programtalk.com/python-examples/eventlet.tpool.execute/)
+
+[python eventlet - file asynchronousc(non-blocking) io](ihttps://stackoverflow.com/questions/17015403/python-eventlet-file-asyncnon-blocking-io?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)
