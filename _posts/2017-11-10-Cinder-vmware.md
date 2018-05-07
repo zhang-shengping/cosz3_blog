@@ -7,6 +7,9 @@ tags:
 - vmware
 ---
 
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/storage-picture.jpg)
+
+
 今天搭了个测试环境，记录下 cinder 对接 vmware 过程。
 
 #### Openstack Cinder 中的服务
