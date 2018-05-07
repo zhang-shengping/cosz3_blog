@@ -11,6 +11,10 @@ tags:
 - process
 - coroutine
 ---
+
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/Software-car-reuse-960x425.jpg)
+
+
 Openstack 中使用到了许多异步和同步，堵塞和非堵塞的概念，在网络上找了些好文章这里针对这些概念和找到的资料做些记录总结。
 
 # 概念
