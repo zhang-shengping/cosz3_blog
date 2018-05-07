@@ -8,7 +8,7 @@ tags:
 ---
 
 
-![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/placement-blog.jpg)
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/placement-blog.jpeg)
 
 
 [Openstack Placement](https://docs.openstack.org/nova/latest/user/placement.html) 是用来统计 Openstack 中 hypervisor 上不同资源总量，使用量，剩余量，和资源类型的服务。Openstack Placemenet 服务以 wsgi REST API 的方式暴露给用户，默认端口是 8778。

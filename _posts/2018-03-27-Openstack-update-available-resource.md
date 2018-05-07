@@ -8,6 +8,8 @@ tags:
 - self-note
 ---
 
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/battery-3360317__480.jpg)
+
 ## update_available_resource 的作用
 
 `update_available_resource` Nova compute **定时**上报资源的方法，他的主要上报对象是 Nova placement 服务，同时也会直接更新数据库中的 `compute node table`。那么 `update_availalbe_resource` 上报了哪些资源？上报的资源大体可分为两类：1 compute service node 的资源，2. hypervisor node（host）资源。
