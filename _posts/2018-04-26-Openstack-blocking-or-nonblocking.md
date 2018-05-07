@@ -7,6 +7,11 @@ tags:
 - non-blocking
 ---
 
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/view-from-the-shard-experience-discounted-tickets.jpg)
+
+
+
+
 在 Openstack 中支持 eventlet 的 wsgi server 是异步非堵塞的网络服务，
 
 wsgi server 非堵塞是因为 wsgi server 在处理请求时如果遇到了 IO wait，eventlet 会调度别的 task 来继续做别的程序处理（比如 监听网络端口，处理其他的 IO 请求）。
