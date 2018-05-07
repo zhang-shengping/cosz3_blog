@@ -7,6 +7,9 @@ tags:
 - vCenter
 ---
 
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/nova-blog-picture.jpeg)
+
+
 Nova 提供了管理 vmware 虚拟机的方法，主要是通过 Nova 的 vmware driver 调用 vCenter webservice API 来实现。这片文章主要记录下 Nova virt driver vmwareapi 是如何实现对 vCenter 的管理。
 ## WSDL + SOAP
 
