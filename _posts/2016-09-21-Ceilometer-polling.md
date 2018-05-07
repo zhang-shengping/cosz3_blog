@@ -7,6 +7,10 @@ tags:
 - self-note
 - ceilometer
 ---
+
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/openstack-1-how-to-monitor.png)
+
+
 Ceilometer 有很多的queue，有时候我会比较困惑哪些这些queue和这些服务之间的关系。所以借此文自己梳理一下这些关系，以备后患。
 
 Ceilometer 主要分为三个组件 ceilometer-polling，ceilometer-notification-agent 和 ceilometer-collector。三个组件分别负责采数据，处理数据，分发数据。下面就一个个梳理下这些服务和各个Queue的关系。
