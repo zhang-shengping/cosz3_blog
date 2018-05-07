@@ -7,6 +7,10 @@ tags:
 - code
 - self-note
 ---
+
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/Filters+and+weight+hosts.jpg)
+
+
 以下是关于一些 P 版 Openstack scheduler 筛选 hosts（compute）代码的分析记录。以后版本筛选 host 方法会有些变化，仅供参考记录。  
 
 ## nova scheduler manager
