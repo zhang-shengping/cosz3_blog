@@ -8,7 +8,7 @@ tags:
 - coroutine
 ---
 
-![useful image]({{ site.url }}/assets/images/blog_pictures/blog-hawk-hill-view.jpg)
+![useful image]({{ site.url }}/cosz3_blog/assets/images/blog_pictures/blog-hawk-hill-view.jpg)
 
 ## Eventlet 基本使用：
 
