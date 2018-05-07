@@ -8,7 +8,7 @@ tags:
 - coroutine
 ---
 
-这里记录下 evenlet 中常用的方法。
+![useful image]({{ site.url }}/assets/images/blog_pictures/blog-hawk-hill-view.jpg)
 
 ## Eventlet 基本使用：
 
