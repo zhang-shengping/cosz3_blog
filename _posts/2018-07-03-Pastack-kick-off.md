@@ -33,7 +33,7 @@ tags:
   NETMASK=255.255.255.0
   GATEWAY=172.16.208.254
   NM_CONTROLLED=no
-  
+
   DEFROUTE=yes
   PEERDNS=yes
   PEERROUTES=yes
@@ -47,7 +47,7 @@ tags:
   NAME=enp0s3
   DEVICE=enp0s3
   ONBOOT=yes
-          
+
   # ifcfg-enp0s8 NIC 数据网网卡
   TYPE=Ethernet
   BOOTPROTO=static
@@ -55,7 +55,7 @@ tags:
   NETMASK=255.255.255.0
   GATEWAY=172.16.208.254
   NM_CONTROLLED=no
-  
+
   DEFROUTE=yes
   PEERDNS=yes
   PEERROUTES=yes
@@ -69,7 +69,7 @@ tags:
   NAME=enp0s8
   DEVICE=enp0s8
   ONBOOT=yes
-  
+
   # Compute node
   # ifcfg-enp0s3 NIC node 管理网网卡
   TYPE=Ethernet
@@ -78,7 +78,7 @@ tags:
   NETMASK=255.255.255.0
   GATEWAY=172.16.208.254
   NM_CONTROLLED=no
-  
+
   DEFROUTE=yes
   PEERDNS=yes
   PEERROUTES=yes
@@ -93,7 +93,7 @@ tags:
   UUID=3052d15f-9489-4fd8-8820-bce765f30252
   DEVICE=enp0s3
   ONBOOT=yes
-  
+
   # ifcfg-enp0s8 NIC 数据网网卡
   TYPE=Ethernet
   BOOTPROTO=static
@@ -101,7 +101,7 @@ tags:
   NETMASK=255.255.255.0
   GATEWAY=172.16.208.254
   NM_CONTROLLED=no
-  
+
   DEFROUTE=yes
   PEERDNS=yes
   PEERROUTES=yes
@@ -125,12 +125,12 @@ tags:
   # 配置环境变量 /etc/environment
   LANG=en_US.utf-8
   LC_ALL=en_US.utf-8
-  
+
   # controller 和 compute 节点配置 yum 源， Queen 版
   sudo yum update -y
   sudo yum install -y centos-release-openstack-queens
   sudo yum update -y
-  
+
   # 网络配置
   sudo systemctl disable firewalld
   sudo systemctl stop firewalld
@@ -138,9 +138,15 @@ tags:
   sudo systemctl stop NetworkManager
   sudo systemctl enable network
   sudo systemctl start network
+
+  # 这里还有非常重要的一步，配置不同的 hostname
+  # 在 controller 节点上配置
+  sudo hostnamectl set-hostname controller-node
+  # 在 compute 节点上行配置
+  sudo hostnamectl set-hostname compute-node
   ```
 
-  
+
 
 ## Allinone
 
@@ -405,7 +411,7 @@ Packstack 在 Linux 上添加 `ifcfg-br-ex` 网卡，同时将外网网卡 enp0s
                 type: patch
                 options: {peer=int-br-ex}
     ovs_version: "2.9.0"
-    
+
 # compute 节点上的 ovs
 [root@localhost ~]# ovs-vsctl show
 d5386df5-93a2-4ff3-96fd-82fe1de3954f
