@@ -6,7 +6,7 @@ tags:
 - Packstack
 ---
 
-![](https://ws3.sinaimg.cn/large/006tNc79gy1fswrvhfaw3j30sg0co74w.jpg)
+![](https://github.com/zhang-shengping/cosz3_blog/raw/gh-pages/images/packstack-kick-off/packstack-kick-off.jpg)
 
 ## Preparation
 

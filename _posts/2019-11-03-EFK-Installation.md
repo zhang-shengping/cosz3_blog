@@ -7,6 +7,8 @@ tags:
 - self-note
 ---
 
+![front](https://github.com/zhang-shengping/cosz3_blog/raw/gh-pages/images/EFK-installation/EFK-logging.jpg)
+
 #  E*K 安装部署
 
 ## 准备（每个 ELK 节点）

@@ -7,9 +7,9 @@ tags:
 - self-note
 ---
 
-# F5 iRule logging 简介
+![front](https://github.com/zhang-shengping/cosz3_blog/raw/gh-pages/images/f5-remote-logging/front.jpg)
 
-[TOC]
+# F5 iRule logging 简介
 
 ## F5 local logging 方式
 
@@ -50,7 +50,7 @@ when HTTP_REQUEST {
 
 **kibana 上的现实**
 
-![kibana log](/Users/pzhang/Documents/other/kibana log.jpg)
+![kibana log](https://github.com/zhang-shengping/cosz3_blog/raw/gh-pages/images/f5-remote-logging/kibana-log.jpg)
 
 由于 log 消息是通过 TMM 处理，所以 log server `10.10.1.20` 必须是 TMM route 可达地址（简单来说就是 可以通过 iRule 所绑定的 listener 所在的 VIP 的 interface 到达 log server 的 IP 地址）。
 

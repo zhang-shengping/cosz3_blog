@@ -7,6 +7,7 @@ tags:
 ---
 
 ![](https://i.ytimg.com/vi/5lDLvHdSeGU/maxresdefault.jpg)
+
 这里记载下 F5 VE VMware 的安装过程：
 
 1. 首先登陆这个网站注册一个 90 天的序列号 https://f5.com/products/trials/product-trials
