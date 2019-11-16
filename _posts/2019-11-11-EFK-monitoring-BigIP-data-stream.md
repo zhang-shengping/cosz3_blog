@@ -1,7 +1,7 @@
 ---
 title: EFK 监控 F5 BigIP 数据流量
 categories:
-- F5
+- EFK
 tags:
 - F5
 - self-note
