@@ -1,7 +1,7 @@
 ---
 title: EFK installation
 categories:
-- elasticsearch
+- Elasticsearch
 tags:
 - EFK
 - self-note

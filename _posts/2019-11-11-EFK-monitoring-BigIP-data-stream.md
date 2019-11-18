@@ -1,7 +1,7 @@
 ---
 title: EFK 监控 F5 BigIP 数据流量
 categories:
-- EFK
+- Elasticsearch
 tags:
 - F5
 - self-note
@@ -297,7 +297,7 @@ Plugin installation was unsuccessful due to error "Kibana now contains X-Pack by
 
 [ElasticSearch 自幹訪客流量分析地圖]([https://blog.toright.com/posts/5668/elasticsearch-%E8%87%AA%E5%B9%B9%E8%A8%AA%E5%AE%A2%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%9C%B0%E5%9C%96.html](https://blog.toright.com/posts/5668/elasticsearch-自幹訪客流量分析地圖.html))
 
-**Elasticsearh**
+**Elasticsearch**
 
 [elasticsearch 7.4.\* 创建 index](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html)
 
